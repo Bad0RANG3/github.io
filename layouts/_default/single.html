@@ -1,0 +1,9 @@
+{{ define "main" }}
+<div class="prose prose-slate dark:prose-invert max-w-none">
+  <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">{{ .Title }}</h1>
+  <div class="text-slate-500 dark:text-slate-400 mb-8 text-sm">
+    {{ .Date.Format "2006-01-02" }}
+  </div>
+  {{ .Content }}
+</div>
+{{ end }}
