@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="页面未找到">
+  <div class="text-center py-16 animate-fade-in">
+    <h1 class="text-6xl font-bold text-indigo-500 mb-4">404</h1>
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-white mb-4">页面未找到</h2>
+    <p class="text-slate-600 dark:text-slate-400 mb-8">抱歉，你访问的页面不存在。</p>
+    <a href="/" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors">
+      ← 返回首页
+    </a>
+  </div>
+</BaseLayout>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+</style>
