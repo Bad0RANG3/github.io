@@ -7,8 +7,6 @@ github:
   name: Bad0RANG3
   url: https://github.com/Bad0RANG3
 
-theme: minima
-
 markdown: kramdown
 highlighter: rouge
 
@@ -16,7 +14,6 @@ collections:
   posts:
     title: Posts
     output: true
-    permalink: /posts/:slug/
 
 defaults:
   - scope:
@@ -24,5 +21,3 @@ defaults:
       type: posts
     values:
       layout: post
-      title: ""
-      description: ""
