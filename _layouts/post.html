@@ -1,0 +1,13 @@
+---
+layout: default
+title: ""
+description: ""
+---
+
+<div class="prose prose-slate dark:prose-invert max-w-none">
+  <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">{{ page.title }}</h1>
+  <div class="text-slate-500 dark:text-slate-400 mb-8 text-sm">
+    {{ page.date | date: "%Y-%m-%d" }}
+  </div>
+  {{ content }}
+</div>
