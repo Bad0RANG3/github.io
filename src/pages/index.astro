@@ -5,16 +5,21 @@ import { getCollection } from 'astro:content';
 const posts = await getCollection('posts');
 const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  });
-}
+const formattedDate = (date: Date) => date.toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit'
+});
 ---
 
 <BaseLayout title="首页" description="分享我在软件开发、技术和生活中的想法与经验。">
+  <div class="fixed inset-0 z-[-1] overflow-hidden">
+    <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline preload="none">
+      <source src="/bgvedio.webm" type="video/webm">
+    </video>
+    <div class="absolute inset-0 bg-gradient-to-b from-white/80 via-white/60 to-white dark:from-[#0f0f1a]/80 dark:via-[#0f0f1a]/60 dark:to-[#0f0f1a]" />
+  </div>
+
   <div class="min-h-[70vh] flex flex-col justify-center items-start pb-12">
     <div class="space-y-6 max-w-2xl">
       <p class="text-lg text-gray-600 dark:text-gray-400">开发者</p>
@@ -54,7 +59,7 @@ function formatDate(date: Date) {
                 <p class="text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
                   {post.data.description}
                 </p>
-                <time class="text-sm text-gray-400">{formatDate(post.data.date)}</time>
+                <time class="text-sm text-gray-400">{formattedDate(post.data.date)}</time>
               </div>
               <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 flex items-center justify-center text-primary dark:text-secondary group-hover:from-primary/20 group-hover:to-secondary/20 transition-all">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -15,81 +15,84 @@ const { Content } = await post.render();
 
 const formattedDate = post.data.date.toLocaleDateString('zh-CN', {
   year: 'numeric',
-  month: '2-digit',
-  day: '2-digit'
+  month: 'long',
+  day: 'numeric'
 });
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
-  <article class="max-w-none">
-    <header class="mb-6">
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+  <article class="max-w-3xl mx-auto">
+    <header class="mb-10 text-center">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
         {post.data.title}
       </h1>
-      <time class="text-sm text-gray-500 dark:text-gray-400">
+      <time class="text-gray-400 text-sm">
         {formattedDate}
       </time>
     </header>
 
-    <div class="prose-slate dark:prose-invert dark:text-gray-300">
+    <div class="prose prose-lg dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
       <Content />
     </div>
   </article>
 </BaseLayout>
 
 <style>
+  .prose {
+    line-height: 1.8;
+  }
   .prose :global(h1) {
-    @apply text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4;
+    @apply text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4;
   }
   .prose :global(h2) {
-    @apply text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3;
+    @apply text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800;
   }
   .prose :global(h3) {
-    @apply text-lg font-semibold text-gray-900 dark:text-white mt-4 mb-2;
+    @apply text-lg font-semibold text-gray-900 dark:text-white mt-6 mb-3;
   }
   .prose :global(p) {
-    @apply leading-relaxed mb-4 text-gray-700 dark:text-gray-300;
+    @apply mb-5;
   }
   .prose :global(a) {
-    @apply text-blue-500 hover:text-purple-500 underline;
+    @apply text-blue-500 hover:text-blue-600 underline decoration-blue-500/30 hover:decoration-blue-500 transition-all;
   }
   .prose :global(code) {
-    @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm;
+    @apply bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded text-sm font-mono text-primary dark:text-secondary;
   }
   .prose :global(pre) {
-    @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4;
+    @apply bg-gray-900 dark:bg-gray-950 text-gray-100 p-5 rounded-xl overflow-x-auto my-6 border border-gray-800;
   }
   .prose :global(pre code) {
-    @apply bg-transparent p-0 text-inherit;
+    @apply bg-transparent p-0 text-inherit text-sm leading-relaxed;
   }
   .prose :global(ul) {
-    @apply list-disc pl-6 mb-4 space-y-1;
+    @apply list-disc pl-6 mb-5 space-y-2;
   }
   .prose :global(ol) {
-    @apply list-decimal pl-6 mb-4 space-y-1;
+    @apply list-decimal pl-6 mb-5 space-y-2;
   }
   .prose :global(li) {
     @apply text-gray-700 dark:text-gray-300;
   }
   .prose :global(blockquote) {
-    @apply border-l-4 border-blue-500 pl-4 italic text-gray-600 dark:text-gray-400 my-4;
+    @apply border-l-4 border-gradient-to-b from-primary to-secondary pl-5 py-1 my-6 italic text-gray-600 dark:text-gray-400 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-r-lg;
   }
   .prose :global(hr) {
-    @apply border-gray-200 dark:border-gray-700 my-8;
+    @apply border-gray-200 dark:border-gray-800 my-10;
   }
   .prose :global(strong) {
-    @apply font-semibold;
+    @apply font-semibold text-gray-900 dark:text-white;
   }
   .prose :global(img) {
-    @apply max-w-full rounded-lg my-4;
+    @apply max-w-full rounded-xl my-6 shadow-lg;
   }
   .prose :global(table) {
-    @apply w-full border-collapse my-4;
+    @apply w-full border-collapse my-6 text-sm;
   }
   .prose :global(th) {
-    @apply border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-2 text-left;
+    @apply border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-3 text-left font-medium;
   }
   .prose :global(td) {
-    @apply border border-gray-200 dark:border-gray-700 p-2;
+    @apply border border-gray-200 dark:border-gray-700 p-3;
   }
 </style>
