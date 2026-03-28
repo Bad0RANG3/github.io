@@ -22,7 +22,7 @@ const currentPath = Astro.url.pathname;
 </head>
 <body class="bg-white dark:bg-[#0f0f1a] text-gray-800 dark:text-gray-200 min-h-screen font-sans antialiased">
   <div class="fixed inset-0 z-[-1] overflow-hidden">
-    <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+    <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline preload="none">
       <source src="/bgvedio.webm" type="video/webm">
     </video>
     <div class="absolute inset-0 bg-gradient-to-b from-white/80 via-white/60 to-white dark:from-[#0f0f1a]/80 dark:via-[#0f0f1a]/60 dark:to-[#0f0f1a]" />
