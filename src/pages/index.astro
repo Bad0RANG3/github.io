@@ -14,22 +14,20 @@ const formattedDate = (date: Date) => date.toLocaleDateString('zh-CN', {
 
 <BaseLayout title="首页" description="分享我在软件开发、技术和生活中的想法与经验。">
   <div class="fixed inset-0 z-[-1] overflow-hidden">
-    <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline preload="none">
-      <source src="/bgvedio.webm" type="video/webm">
-    </video>
-    <div class="absolute inset-0 bg-gradient-to-b from-white/80 via-white/60 to-white dark:from-[#0f0f1a]/80 dark:via-[#0f0f1a]/60 dark:to-[#0f0f1a]" />
+    <div class="absolute inset-0 bg-gradient-to-br from-pink-300 via-purple-300 to-pink-400 dark:from-pink-900 dark:via-purple-900 dark:to-pink-950" />
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC4wMiIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30" />
   </div>
 
   <div class="min-h-[70vh] flex flex-col justify-center items-start pb-12">
     <div class="space-y-6 max-w-2xl">
-      <p class="text-lg text-gray-600 dark:text-gray-400">开发者</p>
+      <p class="text-lg text-pink-700 dark:text-pink-300 font-medium">开发者</p>
       <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
-        你好👋 我是<span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Bad0RANG3</span>
+        你好👋 我是<span class="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Bad0RANG3</span>
       </h1>
-      <p class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+      <p class="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
         喜欢在计算机方面折腾的一个普普通通的菜鸟，更倾向于视频特效的制作。
       </p>
-      <a href="/about" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-medium hover:shadow-lg hover:shadow-primary/25 transition-all duration-300">
+      <a href="/about" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300">
         了解更多
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -40,7 +38,7 @@ const formattedDate = (date: Date) => date.toLocaleDateString('zh-CN', {
 
   <section class="py-12">
     <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">
-      <span class="w-1 h-6 bg-gradient-to-b from-primary to-secondary rounded-full"></span>
+      <span class="w-1 h-6 bg-gradient-to-b from-pink-500 to-purple-500 rounded-full"></span>
       文章
     </h2>
     {sortedPosts.length === 0 ? (
@@ -50,10 +48,10 @@ const formattedDate = (date: Date) => date.toLocaleDateString('zh-CN', {
     ) : (
       <div class="grid gap-6">
         {sortedPosts.map((post) => (
-          <a href={`/posts/${post.slug}`} class="group block p-6 rounded-2xl border border-gray-100 dark:border-gray-800 hover:border-primary/30 dark:hover:border-secondary/30 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
+          <a href={`/posts/${post.slug}`} class="group block p-6 rounded-2xl border border-gray-100 dark:border-gray-800 hover:border-pink-300/50 dark:hover:border-purple-500/50 bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm hover:shadow-xl hover:shadow-pink-500/10 transition-all duration-300">
             <div class="flex items-start justify-between gap-4">
               <div class="flex-1 min-w-0">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-primary dark:group-hover:text-secondary transition-colors mb-2">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-pink-500 dark:group-hover:text-purple-400 transition-colors mb-2">
                   {post.data.title}
                 </h3>
                 <p class="text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
@@ -61,7 +59,7 @@ const formattedDate = (date: Date) => date.toLocaleDateString('zh-CN', {
                 </p>
                 <time class="text-sm text-gray-400">{formattedDate(post.data.date)}</time>
               </div>
-              <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 flex items-center justify-center text-primary dark:text-secondary group-hover:from-primary/20 group-hover:to-secondary/20 transition-all">
+              <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-pink-500/10 to-purple-500/10 flex items-center justify-center text-pink-500 dark:text-purple-400 group-hover:from-pink-500/20 group-hover:to-purple-500/20 transition-all">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
