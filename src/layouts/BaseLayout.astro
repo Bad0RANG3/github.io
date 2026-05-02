@@ -1,57 +1,191 @@
 ---
+import '../styles/global.css';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import { siteConfig } from '../config/site';
+
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
+  ogImage?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  updatedTime?: string;
 }
 
-const { title, description = '分享我在软件开发、技术和生活中的想法与经验。' } = Astro.props;
+const {
+  title = siteConfig.title,
+  description = siteConfig.description,
+  ogImage = siteConfig.ogImage,
+  type = 'website',
+  publishedTime,
+  updatedTime,
+} = Astro.props;
+
 const currentPath = Astro.url.pathname;
+const pageTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.title}`;
+const canonicalUrl = new URL(currentPath, siteConfig.siteUrl).toString();
+const socialImageUrl = new URL(ogImage, siteConfig.siteUrl).toString();
 ---
 
 <!doctype html>
-<html lang="zh" class="dark">
+<html lang="zh">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title}</title>
+  <meta name="generator" content={Astro.generator}>
+  <title>{pageTitle}</title>
   <meta name="description" content={description}>
+  <meta name="theme-color" content="#ec4899">
+  <link rel="canonical" href={canonicalUrl}>
+  <link rel="alternate" type="application/rss+xml" title={`${siteConfig.title} RSS`} href="/rss.xml">
   <link rel="icon" href="/ico.ico" type="image/x-icon">
-  <link rel="stylesheet" href="https://cdn.staticfile.org/misans/3.1.0/css/misans.min.css">
-</head>
-<body class="bg-white dark:bg-[#0f0f1a] text-gray-800 dark:text-gray-200 min-h-screen font-sans antialiased">
-  <nav class="sticky top-0 z-50 bg-white/90 dark:bg-[#1a1a2e]/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <div class="flex items-center justify-between h-14">
-        <a href="/" class="text-lg font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          Bad0RANG3's Blog
-        </a>
-        <div class="flex items-center gap-1">
-          <a href="/" class:list={['px-3 py-1.5 rounded-lg text-sm transition-colors', currentPath === '/' ? 'bg-gradient-to-r from-primary/10 to-secondary/10 text-primary' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800']}>
-            首页
-          </a>
-          <a href="/about" class:list={['px-3 py-1.5 rounded-lg text-sm transition-colors', currentPath === '/about' ? 'bg-gradient-to-r from-primary/10 to-secondary/10 text-primary' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800']}>
-            关于
-          </a>
-        </div>
-      </div>
-    </div>
-  </nav>
 
-  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+  <meta property="og:type" content={type}>
+  <meta property="og:title" content={pageTitle}>
+  <meta property="og:description" content={description}>
+  <meta property="og:url" content={canonicalUrl}>
+  <meta property="og:image" content={socialImageUrl}>
+  <meta property="og:site_name" content={siteConfig.title}>
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={pageTitle}>
+  <meta name="twitter:description" content={description}>
+  <meta name="twitter:image" content={socialImageUrl}>
+
+  {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+  {updatedTime && <meta property="article:modified_time" content={updatedTime} />}
+
+  <script is:inline>
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+    document.documentElement.classList.toggle('dark', isDark);
+  </script>
+</head>
+<body class="min-h-screen bg-white font-sans antialiased text-gray-800 dark:bg-[#0f0f1a] dark:text-gray-200">
+  <SiteHeader currentPath={currentPath} />
+  <main class="page-enter mx-auto max-w-5xl px-4 py-8 sm:px-6" data-page-enter data-reveal-root>
     <slot />
   </main>
+  <SiteFooter />
 
-  <footer class="border-t border-gray-100 dark:border-gray-800 mt-16">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
-      © 2026-NOW Bad0RANG3 With ❤️
-    </div>
-  </footer>
+  <script is:inline>
+    const PAGE_EXIT_DURATION = 180;
+    let navigationLocked = false;
 
-  <script>
-    const theme = localStorage.getItem('theme');
-    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    }
+    const getPageRoot = () => {
+      const root = document.querySelector('[data-page-enter]');
+      return root instanceof HTMLElement ? root : null;
+    };
+
+    const initializePageEnter = () => {
+      const root = getPageRoot();
+      if (!root) {
+        return;
+      }
+
+      root.classList.remove('is-leaving');
+      root.classList.remove('is-visible');
+      void root.offsetWidth;
+      root.classList.add('is-visible');
+    };
+
+    const initializeReveal = () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.querySelectorAll('[data-reveal]').forEach((element) => {
+          element.classList.add('is-visible');
+        });
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) {
+            continue;
+          }
+
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      }, {
+        threshold: 0.16,
+        rootMargin: '0px 0px -10% 0px',
+      });
+
+      document.querySelectorAll('[data-reveal]').forEach((element) => {
+        observer.observe(element);
+      });
+    };
+
+    const handlePageTransition = (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) {
+        return;
+      }
+
+      const link = target.closest('a');
+      if (!(link instanceof HTMLAnchorElement)) {
+        return;
+      }
+
+      if (navigationLocked || event.defaultPrevented) {
+        return;
+      }
+
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+      }
+
+      if (link.target && link.target !== '_self') {
+        return;
+      }
+
+      if (link.hasAttribute('download')) {
+        return;
+      }
+
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+        return;
+      }
+
+      const nextUrl = new URL(link.href, window.location.href);
+      if (nextUrl.origin !== window.location.origin) {
+        return;
+      }
+
+      if (nextUrl.pathname === window.location.pathname && nextUrl.search === window.location.search) {
+        return;
+      }
+
+      const root = getPageRoot();
+      if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+      }
+
+      event.preventDefault();
+      navigationLocked = true;
+      root.classList.remove('is-visible');
+      root.classList.add('is-leaving');
+
+      window.setTimeout(() => {
+        window.location.assign(nextUrl.toString());
+      }, PAGE_EXIT_DURATION);
+    };
+
+    const initializePage = () => {
+      navigationLocked = false;
+      initializePageEnter();
+      initializeReveal();
+    };
+
+    document.addEventListener('click', handlePageTransition);
+    document.addEventListener('astro:page-load', initializePage);
+    window.addEventListener('pageshow', () => {
+      navigationLocked = false;
+    });
+    initializePage();
   </script>
 </body>
 </html>

@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/blog/PostCard.astro';
+import { getPublishedPosts } from '../../lib/content';
+
+const posts = await getPublishedPosts();
+---
+
+<BaseLayout title="文章" description="浏览博客中的全部文章。">
+  <section class="mb-10 space-y-4">
+    <p data-reveal class="reveal text-sm font-medium uppercase tracking-[0.3em] text-pink-600 dark:text-pink-300">Posts</p>
+    <div>
+      <h1 data-reveal class="reveal text-4xl font-bold text-gray-900 dark:text-white" style="--reveal-delay:80ms">全部文章</h1>
+      <p data-reveal class="reveal mt-3 text-gray-600 dark:text-gray-300" style="--reveal-delay:150ms">目前共发布 {posts.length} 篇文章，按最近更新时间排序。</p>
+    </div>
+  </section>
+
+  {posts.length === 0 ? (
+    <div data-reveal class="glass-card reveal p-8 text-center text-gray-500 dark:text-gray-400">还没有文章哦</div>
+  ) : (
+    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {posts.map((post, index) => (
+        <div style={`--reveal-delay:${index * 70}ms`}>
+          <PostCard post={post} />
+        </div>
+      ))}
+    </div>
+  )}
+</BaseLayout>

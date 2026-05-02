@@ -1,0 +1,52 @@
+---
+const iconMoon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z" /></svg>`;
+const iconSun = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25M12 18.75V21M4.97 4.97l1.59 1.59M17.44 17.44l1.59 1.59M3 12h2.25M18.75 12H21M4.97 19.03l1.59-1.59M17.44 6.56l1.59-1.59M15.75 12A3.75 3.75 0 1 1 8.25 12a3.75 3.75 0 0 1 7.5 0Z" /></svg>`;
+---
+
+<button
+  type="button"
+  class="interactive-link inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white/80 text-gray-700 shadow-[0_8px_20px_rgba(15,23,42,0.05)] hover:border-pink-300 hover:shadow-[0_10px_24px_rgba(236,72,153,0.1)] dark:border-gray-700 dark:bg-gray-900/80 dark:text-gray-200 dark:hover:border-purple-400 dark:hover:shadow-[0_10px_24px_rgba(168,85,247,0.1)]"
+  data-theme-toggle
+  aria-label="切换主题"
+>
+  <span class="h-5 w-5 transition duration-300" data-theme-toggle-icon></span>
+</button>
+
+<script is:inline define:vars={{ iconMoon, iconSun }}>
+  const renderThemeToggle = () => {
+    const button = document.querySelector('[data-theme-toggle]');
+    const icon = button?.querySelector('[data-theme-toggle-icon]');
+    const isDark = document.documentElement.classList.contains('dark');
+
+    if (!button || !icon) {
+      return;
+    }
+
+    button.setAttribute('aria-pressed', String(isDark));
+    button.setAttribute('title', isDark ? '切换到浅色模式' : '切换到深色模式');
+    icon.innerHTML = isDark ? iconSun : iconMoon;
+    icon.style.transform = isDark ? 'rotate(90deg) scale(1.02)' : 'rotate(0deg) scale(1)';
+  };
+
+  const initThemeToggle = () => {
+    const button = document.querySelector('[data-theme-toggle]');
+
+    if (!button || button.getAttribute('data-theme-ready') === 'true') {
+      renderThemeToggle();
+      return;
+    }
+
+    button.setAttribute('data-theme-ready', 'true');
+    button.addEventListener('click', () => {
+      const nextTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+      document.documentElement.classList.toggle('dark', nextTheme === 'dark');
+      localStorage.setItem('theme', nextTheme);
+      renderThemeToggle();
+    });
+
+    renderThemeToggle();
+  };
+
+  document.addEventListener('astro:page-load', initThemeToggle);
+  initThemeToggle();
+</script>

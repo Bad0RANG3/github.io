@@ -1,0 +1,29 @@
+---
+interface Props {
+  tags: string[];
+  linked?: boolean;
+}
+
+const { tags, linked = true } = Astro.props;
+---
+
+{tags.length > 0 && (
+  <div class="flex flex-wrap gap-2">
+    {tags.map((tag, index) => (
+      linked ? (
+        <a
+          href={`/tags/${encodeURIComponent(tag)}`}
+          data-reveal
+          style={`--reveal-delay:${index * 45}ms`}
+          class="interactive-link reveal rounded-full border border-pink-500/20 bg-gradient-to-r from-pink-500/10 to-purple-500/10 px-3 py-1 text-xs text-gray-700 hover:border-pink-400/40 hover:text-pink-500 hover:shadow-[0_10px_24px_rgba(236,72,153,0.14)] dark:border-purple-400/20 dark:text-gray-300 dark:hover:text-purple-300 dark:hover:shadow-[0_10px_24px_rgba(168,85,247,0.12)]"
+        >
+          #{tag}
+        </a>
+      ) : (
+        <span class="rounded-full border border-pink-500/20 bg-gradient-to-r from-pink-500/10 to-purple-500/10 px-3 py-1 text-xs text-gray-700 transition duration-300 group-hover:-translate-y-0.5 group-hover:border-pink-300/40 dark:border-purple-400/20 dark:text-gray-300 dark:group-hover:border-purple-400/40">
+          #{tag}
+        </span>
+      )
+    ))}
+  </div>
+)}

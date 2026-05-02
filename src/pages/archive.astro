@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getArchiveGroups } from '../lib/content';
+import { formatDate } from '../lib/date';
+
+const groups = await getArchiveGroups();
+---
+
+<BaseLayout title="归档" description="按时间浏览博客文章归档。">
+  <section class="mb-10 space-y-4">
+    <p data-reveal class="reveal text-sm font-medium uppercase tracking-[0.3em] text-pink-600 dark:text-pink-300">Archive</p>
+    <div>
+      <h1 data-reveal class="reveal text-4xl font-bold text-gray-900 dark:text-white" style="--reveal-delay:80ms">时间归档</h1>
+      <p data-reveal class="reveal mt-3 text-gray-600 dark:text-gray-300" style="--reveal-delay:150ms">按年份整理所有已发布文章。</p>
+    </div>
+  </section>
+
+  <div class="space-y-8">
+    {groups.map((group, groupIndex) => (
+      <section data-reveal class="glass-card motion-surface reveal p-6" style={`--reveal-delay:${groupIndex * 90}ms`}>
+        <div class="mb-6 flex items-center gap-3">
+          <span class="section-title-accent"></span>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{group.year}</h2>
+          <span class="text-sm text-gray-400">{group.posts.length} 篇</span>
+        </div>
+        <div class="space-y-4">
+          {group.posts.map((post, index) => (
+            <a data-reveal href={`/posts/${post.slug}`} style={`--reveal-delay:${80 + index * 55}ms`} class="interactive-link reveal flex flex-col gap-2 rounded-xl border border-transparent px-4 py-3 hover:border-pink-300/40 hover:bg-pink-50/60 hover:shadow-[0_12px_28px_rgba(236,72,153,0.1)] dark:hover:border-purple-500/30 dark:hover:bg-gray-800/60 dark:hover:shadow-[0_12px_28px_rgba(168,85,247,0.1)] sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h3 class="font-medium text-gray-900 dark:text-white">{post.data.title}</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{post.data.description}</p>
+              </div>
+              <time class="text-sm text-gray-400">{formatDate(post.data.date)}</time>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

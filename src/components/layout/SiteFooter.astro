@@ -1,0 +1,18 @@
+---
+import { siteConfig } from '../../config/site';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="mt-16 border-t border-gray-100 dark:border-gray-800">
+  <div class="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8 text-sm text-gray-500 dark:text-gray-400 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <p>© {currentYear} {siteConfig.author.name}</p>
+    <div class="flex flex-wrap items-center gap-4">
+      {siteConfig.socials.map((social) => (
+        <a href={social.url} target="_blank" rel="noopener noreferrer" class="transition hover:text-pink-500 dark:hover:text-purple-300">
+          {social.name}
+        </a>
+      ))}
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,38 @@
+---
+import type { Post } from '../../lib/content';
+import PostMeta from './PostMeta.astro';
+import TagList from './TagList.astro';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+---
+
+<a href={`/posts/${post.slug}`} class="group block reveal motion-scale" data-reveal>
+  <article class="glass-card motion-surface h-full p-6 hover:border-pink-300/40 hover:shadow-[0_18px_36px_rgba(236,72,153,0.08)] dark:hover:border-purple-500/40 dark:hover:shadow-[0_18px_36px_rgba(168,85,247,0.08)]">
+    <div class="mb-4 flex flex-wrap items-center gap-2">
+      {post.data.featured && (
+        <span class="rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-2.5 py-1 text-xs font-medium text-white shadow-[0_6px_16px_rgba(236,72,153,0.18)]">
+          精选
+        </span>
+      )}
+      {post.data.category && (
+        <span class="rounded-full border border-gray-200 px-2.5 py-1 text-xs text-gray-500 transition-colors group-hover:border-pink-200 group-hover:text-pink-500 dark:border-gray-700 dark:text-gray-400 dark:group-hover:border-purple-500/30 dark:group-hover:text-purple-300">
+          {post.data.category}
+        </span>
+      )}
+    </div>
+    <h3 class="mb-2 text-xl font-semibold text-gray-900 transition-colors duration-200 group-hover:text-pink-500 dark:text-white dark:group-hover:text-purple-300">
+      {post.data.title}
+    </h3>
+    <p class="mb-4 line-clamp-3 text-gray-600 transition-colors duration-200 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300">
+      {post.data.description}
+    </p>
+    <div class="flex flex-col gap-3">
+      <PostMeta date={post.data.date} updatedDate={post.data.updatedDate} />
+      <TagList tags={post.data.tags} linked={false} />
+    </div>
+  </article>
+</a>

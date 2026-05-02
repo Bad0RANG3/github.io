@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import PostMeta from '../../components/blog/PostMeta.astro';
+import TagList from '../../components/blog/TagList.astro';
+import { getPublishedPosts } from '../../lib/content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts');
-  return posts.map(post => ({
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
   }));
@@ -12,87 +14,70 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
-
-const formattedDate = post.data.date.toLocaleDateString('zh-CN', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric'
-});
+const isResourceList = post.data.category === '资源清单';
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
-  <article class="max-w-3xl mx-auto">
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  ogImage={post.data.cover}
+  type="article"
+  publishedTime={post.data.date.toISOString()}
+  updatedTime={post.data.updatedDate?.toISOString()}
+>
+  <article class:list={['mx-auto', isResourceList ? 'max-w-5xl' : 'max-w-3xl']}>
     <header class="mb-10 text-center">
-      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+      <div data-reveal class="reveal mb-4 flex flex-wrap items-center justify-center gap-2">
+        {post.data.featured && (
+          <span class="rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-2.5 py-1 text-xs font-medium text-white shadow-[0_8px_24px_rgba(236,72,153,0.22)]">
+            精选文章
+          </span>
+        )}
+        {post.data.category && (
+          <span class="rounded-full border border-gray-200 px-2.5 py-1 text-xs text-gray-500 dark:border-gray-700 dark:text-gray-400">
+            {post.data.category}
+          </span>
+        )}
+      </div>
+      <h1 data-reveal class="reveal mb-4 text-3xl font-bold leading-tight text-gray-900 dark:text-white md:text-4xl" style="--reveal-delay:90ms">
         {post.data.title}
       </h1>
-      <time class="text-gray-400 text-sm">
-        {formattedDate}
-      </time>
+      <p data-reveal class="reveal mx-auto mb-4 max-w-2xl text-gray-600 dark:text-gray-300" style="--reveal-delay:150ms">
+        {post.data.description}
+      </p>
+      <div class="space-y-4">
+        <div data-reveal class="reveal" style="--reveal-delay:210ms">
+          <PostMeta date={post.data.date} updatedDate={post.data.updatedDate} centered long />
+        </div>
+        <div data-reveal class="reveal flex justify-center" style="--reveal-delay:260ms">
+          <TagList tags={post.data.tags} />
+        </div>
+      </div>
     </header>
 
-    <div class="prose prose-lg dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+    {isResourceList && (
+      <div data-reveal class="glass-card reveal mb-8 p-5 sm:p-6" style="--reveal-delay:300ms">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p class="text-xs font-medium uppercase tracking-[0.28em] text-pink-500 dark:text-pink-300">Guide</p>
+            <h2 class="mt-2 text-lg font-semibold text-gray-900 dark:text-white">这篇文章怎么读更省时间</h2>
+            <p class="mt-2 max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-400">
+              这是一篇偏“资源导航”型长文，推荐先看上方的快速入口，再按自己的场景跳到对应分区；如果你只想找平替，优先看“成本 / 限制”和“可替代方案”两列。
+            </p>
+          </div>
+          <div class="rounded-2xl border border-pink-200/60 bg-pink-50/70 px-4 py-3 text-left text-sm text-pink-600 shadow-[0_10px_24px_rgba(236,72,153,0.08)] dark:border-purple-500/20 dark:bg-purple-950/30 dark:text-purple-300">
+            建议桌面端阅读，表格更完整。
+          </div>
+        </div>
+      </div>
+    )}
+
+    {post.data.cover && (
+      <img data-reveal src={post.data.cover} alt={post.data.title} class="reveal mb-8 w-full rounded-3xl border border-gray-100 object-cover shadow-[0_24px_60px_rgba(15,23,42,0.12)] dark:border-gray-800" style="--reveal-delay:320ms" />
+    )}
+
+    <div data-reveal class:list={['prose-content reveal', isResourceList && 'prose-resource-list']} style="--reveal-delay:220ms">
       <Content />
     </div>
   </article>
 </BaseLayout>
-
-<style>
-  .prose {
-    line-height: 1.8;
-  }
-  .prose :global(h1) {
-    @apply text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4;
-  }
-  .prose :global(h2) {
-    @apply text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800;
-  }
-  .prose :global(h3) {
-    @apply text-lg font-semibold text-gray-900 dark:text-white mt-6 mb-3;
-  }
-  .prose :global(p) {
-    @apply mb-5;
-  }
-  .prose :global(a) {
-    @apply text-pink-500 hover:text-purple-500 underline decoration-pink-500/30 hover:decoration-purple-500 transition-all;
-  }
-  .prose :global(code) {
-    @apply bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded text-sm font-mono text-primary dark:text-secondary;
-  }
-  .prose :global(pre) {
-    @apply bg-gray-900 dark:bg-gray-950 text-gray-100 p-5 rounded-xl overflow-x-auto my-6 border border-gray-800;
-  }
-  .prose :global(pre code) {
-    @apply bg-transparent p-0 text-inherit text-sm leading-relaxed;
-  }
-  .prose :global(ul) {
-    @apply list-disc pl-6 mb-5 space-y-2;
-  }
-  .prose :global(ol) {
-    @apply list-decimal pl-6 mb-5 space-y-2;
-  }
-  .prose :global(li) {
-    @apply text-gray-700 dark:text-gray-300;
-  }
-  .prose :global(blockquote) {
-    @apply border-l-4 border-primary pl-5 py-1 my-6 italic text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-r-lg;
-  }
-  .prose :global(hr) {
-    @apply border-gray-200 dark:border-gray-800 my-10;
-  }
-  .prose :global(strong) {
-    @apply font-semibold text-gray-900 dark:text-white;
-  }
-  .prose :global(img) {
-    @apply max-w-full rounded-xl my-6 shadow-lg;
-  }
-  .prose :global(table) {
-    @apply w-full border-collapse my-6 text-sm;
-  }
-  .prose :global(th) {
-    @apply border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-3 text-left font-medium;
-  }
-  .prose :global(td) {
-    @apply border border-gray-200 dark:border-gray-700 p-3;
-  }
-</style>
