@@ -32,7 +32,7 @@ draft: false
 
 ### 第一步：下载配置文件
 
-[点击下载 CS2PraticeCFG5.0.7z](https://github.com/Bad0RANG3/CS2PraticeCFG/releases/download/V5.0/CS2PraticeCFG5.0.7z)
+[点击下载 CS2PraticeCFG.zip](https://github.com/Bad0RANG3/CS2PraticeCFG/releases/download/V5.1/CS2PraticeCFG.zip)
 
 ### 第二步：复制文件
 
